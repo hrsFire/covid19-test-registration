@@ -226,7 +226,8 @@ class _OverviewScreenState extends State<OverviewScreen>
             Container(
                 alignment: Alignment.bottomCenter,
                 child: SizedBox(
-                    height: 0,
+                    height: 1,
+                    width: 1,
                     child: WebView(
                       initialUrl:
                           'https://vorarlbergtestet.lwz-vorarlberg.at/GesundheitRegister/Covid/Register',
@@ -238,7 +239,7 @@ class _OverviewScreenState extends State<OverviewScreen>
 
                         _controller.complete(webViewController);
 
-                        Future.delayed(const Duration(milliseconds: 2000),
+                        Future.delayed(const Duration(milliseconds: 3000),
                             () async {
                           // Catch the JavaScript invoke exception
                           try {
@@ -279,7 +280,6 @@ AppGrecaptcha.postMessage(null);
 
   Future<void> _selectDate(BuildContext context) async {
     FocusScope.of(context).unfocus();
-    print("selected date");
 
     final DateTime pickedDate = await showDatePicker(
         context: context,

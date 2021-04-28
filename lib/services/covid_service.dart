@@ -377,16 +377,12 @@ class CovidService {
           __RequestVerificationToken: "${requestValidationCode}"
         }''');
 
-        print(response.statusCode);
-        print(response.body);
-
         if (response.statusCode == 200) {
           var body = response.body;
           return body == "true";
         }
       } catch (error) {
         // Intentionally left blank
-        var a = 1;
       }
     }
 
