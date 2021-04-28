@@ -23,6 +23,7 @@ class _OverviewScreenState extends State<OverviewScreen>
     with WidgetsBindingObserver {
   final Completer<WebViewController> _controller =
       Completer<WebViewController>();
+  WebViewController _webViewController;
   final _searchFieldController = TextEditingController();
   bool _isLoading = false;
   DateTime _selectedDate;
@@ -237,26 +238,10 @@ class _OverviewScreenState extends State<OverviewScreen>
                           return;
                         }
 
+                        _webViewController = webViewController;
                         _controller.complete(webViewController);
 
-                        Future.delayed(const Duration(milliseconds: 3000),
-                            () async {
-                          // Catch the JavaScript invoke exception
-                          try {
-                            await webViewController.evaluateJavascript('''
-grecaptcha.ready(function () {
-  grecaptcha.execute('6LfzL-sZAAAAAA0HC5T8fGz0TzLA7JuNn5GK0Zlz', { action: 'submit' }).then(function (grecaptcharesponse) {
-    //alert(grecaptcharesponse);
-    AppGrecaptcha.postMessage(grecaptcharesponse);
-    return;
-  });
-});
-AppGrecaptcha.postMessage(null);
-''');
-                          } on MissingPluginException catch (error) {
-                            // Intentionally left blank
-                          }
-                        });
+                        _loadGrecaptcha();
                       },
                       onProgress: (int progress) {
                         print("WebView is loading (progress : $progress%)");
@@ -402,6 +387,7 @@ AppGrecaptcha.postMessage(null);
   Future<bool> _registerForTest(
       TestLocation testLocation, TestDate testDate) async {
     if (_grecaptcha == null) {
+      _loadNewGrecaptcha();
       return false;
     }
 
@@ -425,6 +411,7 @@ AppGrecaptcha.postMessage(null);
           content: Text(LocaleKeys.registration_successful.tr()),
           backgroundColor: Colors.green));
 
+      _loadNewGrecaptcha();
       return true;
 
       // Not required at the moment
@@ -441,6 +428,32 @@ AppGrecaptcha.postMessage(null);
       backgroundColor: Colors.red,
     ));
 
+    _loadNewGrecaptcha();
     return false;
+  }
+
+  void _loadGrecaptcha() {
+    Future.delayed(const Duration(milliseconds: 3000), () async {
+      // Catch the JavaScript invoke exception
+      try {
+        await _webViewController.evaluateJavascript('''
+grecaptcha.ready(function () {
+  grecaptcha.execute('6LfzL-sZAAAAAA0HC5T8fGz0TzLA7JuNn5GK0Zlz', { action: 'submit' }).then(function (grecaptcharesponse) {
+    //alert(grecaptcharesponse);
+    AppGrecaptcha.postMessage(grecaptcharesponse);
+    return;
+  });
+});
+AppGrecaptcha.postMessage(null);
+''');
+      } on MissingPluginException catch (error) {
+        // Intentionally left blank
+      }
+    });
+  }
+
+  void _loadNewGrecaptcha() {
+    _webViewController.reload();
+    _loadGrecaptcha();
   }
 }
