@@ -362,7 +362,7 @@ AppGrecaptcha.postMessage(null);
   bool _isTestLocationsInSearch(TestLocationWithDates testLocation,
       String searchText, DateTime selectedDate) {
     var searchTextLc = searchText?.toLowerCase();
-    var testLocationValueLc = testLocation.value;
+    var testLocationValueLc = testLocation.value.toLowerCase();
 
     if (_selectedDate != null && searchText != null && searchText.isNotEmpty) {
       return testLocationValueLc.contains(searchTextLc) &&
@@ -379,7 +379,7 @@ AppGrecaptcha.postMessage(null);
   bool _isTestDateInSearch(
       TestDate testDate, String searchText, DateTime selectedDate) {
     var searchTextLc = searchText?.toLowerCase();
-    var testDateValueLc = testDate.value;
+    var testDateValueLc = testDate.value.toLowerCase();
 
     if (_selectedDate != null && searchText != null && searchText.isNotEmpty) {
       return testDateValueLc.contains(searchTextLc) &&
