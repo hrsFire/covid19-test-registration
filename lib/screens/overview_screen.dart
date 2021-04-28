@@ -33,6 +33,7 @@ class _OverviewScreenState extends State<OverviewScreen>
   List<TestDate> _testDates = [];
   TestLocation _chosenTestSiteForSampling;
   TestDate _chosenTestDateForSampling;
+  bool _isRegistering = false;
   String _grecaptcha;
 
   @override
@@ -215,7 +216,8 @@ class _OverviewScreenState extends State<OverviewScreen>
                     ElevatedButton(
                       child: Text(LocaleKeys.register.tr()),
                       onPressed: _chosenTestSiteForSampling != null &&
-                              _chosenTestDateForSampling != null
+                              _chosenTestDateForSampling != null &&
+                              !_isRegistering
                           ? () {
                               _registerForTest(_chosenTestSiteForSampling,
                                   _chosenTestDateForSampling);
@@ -386,8 +388,15 @@ class _OverviewScreenState extends State<OverviewScreen>
 
   Future<bool> _registerForTest(
       TestLocation testLocation, TestDate testDate) async {
+    setState(() {
+      _isRegistering = true;
+    });
+
     if (_grecaptcha == null) {
       _loadNewGrecaptcha();
+      setState(() {
+        _isRegistering = false;
+      });
       return false;
     }
 
@@ -412,6 +421,9 @@ class _OverviewScreenState extends State<OverviewScreen>
           backgroundColor: Colors.green));
 
       _loadNewGrecaptcha();
+      setState(() {
+        _isRegistering = false;
+      });
       return true;
 
       // Not required at the moment
@@ -429,6 +441,9 @@ class _OverviewScreenState extends State<OverviewScreen>
     ));
 
     _loadNewGrecaptcha();
+    setState(() {
+      _isRegistering = false;
+    });
     return false;
   }
 
