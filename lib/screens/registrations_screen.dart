@@ -64,7 +64,8 @@ class _RegistrationsScreenState extends State<RegistrationsScreen>
 
               Future.delayed(const Duration(milliseconds: 3000), () async {
                 await webViewController.evaluateJavascript('''
-document.querySelector('[onclick*=updateRegistration]').click()
+document.querySelector('[onclick*=HideWindowMessage]').click();
+document.querySelector('[onclick*=updateRegistration]').click();
 document.getElementById('num_1UpdateForm').value = "${lastTestNumber}";
 document.getElementById('birthdayUpdateForm').value = "${userSettings.dateOfBirth}";
 document.getElementById('submitUpdateForm').click();
