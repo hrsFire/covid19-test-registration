@@ -64,13 +64,12 @@ class _RegistrationsScreenState extends State<RegistrationsScreen>
 
               Future.delayed(const Duration(milliseconds: 3000), () async {
                 await webViewController.evaluateJavascript('''
-                document.querySelector('[onclick*=updateRegistration]').click()
+document.querySelector('[onclick*=updateRegistration]').click()
 document.getElementById('num_1UpdateForm').value = "${lastTestNumber}";
 document.getElementById('birthdayUpdateForm').value = "${userSettings.dateOfBirth}";
 document.getElementById('submitUpdateForm').click();
 document.querySelector('[aria-label="Close"]').remove();
-
-''');
+                ''');
 
                 var tan = await CovidService.getTan();
 
@@ -78,7 +77,24 @@ document.querySelector('[aria-label="Close"]').remove();
                   await webViewController.evaluateJavascript('''
 document.getElementById('tanInput').value = "${tan}";
 document.querySelector('[onclick="sendTan()"]').click();
-''');
+                  ''');
+
+                  Future.delayed(const Duration(milliseconds: 3000), () async {
+                    await webViewController.evaluateJavascript('''
+document.querySelectorAll(`input[value*='\${new Date().toLocaleDateString(navigator.language, {
+                      day: "2-digit",
+                      month: "2-digit",
+                      year: "2-digit"
+                    })}']`).forEach(x => {
+  x.style.backgroundColor = "transparent";
+  let parentItem = x.parentNode;
+  parentItem.backgroundColor = "transparent";
+  let item = parentItem.parentNode;
+  item.style.backgroundColor = "orange";
+  item.scrollIntoView();
+});
+                    ''');
+                  });
                 }
               });
             }
