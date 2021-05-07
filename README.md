@@ -15,7 +15,7 @@ For help getting started with Flutter, view our
 [online documentation](https://flutter.dev/docs), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
 
-## Building ther app for the PlayStore
+## Building the app for the PlayStore
 [How to publish to the PlayStore](https://flutter.dev/docs/deployment/android)
 
 First the user has to generate a certificate:
