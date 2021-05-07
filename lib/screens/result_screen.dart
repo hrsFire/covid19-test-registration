@@ -61,11 +61,11 @@ class _ResultScreenState extends State<ResultScreen>
                 lastTestNumber != null) {
               var userSettings = await Settings.getUserDefinedSettings();
               webViewController.loadUrl(
-                  'https://vorarlbergtestet.lwz-vorarlberg.at/GesundheitRegister/Request/Result?num=${lastTestNumber}&pin=${userSettings.dateOfBirth}');
+                  'https://vorarlbergtestet.lwz-vorarlberg.at/GesundheitRegister/Request/Result?num=${lastTestNumber}');
 
               Future.delayed(const Duration(milliseconds: 2500), () async {
                 await webViewController.evaluateJavascript('''
-//document.getElementById('pin').value = "${userSettings.dateOfBirth}";
+document.getElementById('birthday').value = "${userSettings.dateOfBirth}";
 document.getElementById('btnSend').click();
 document.querySelector('[aria-label="Close"]').remove();
 
